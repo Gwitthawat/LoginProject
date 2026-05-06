@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.config.Passconfig;
 import com.example.demo.model.Usermodel;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.util.JwtUtil;
 
 @Service
 public class Userservice {
@@ -18,6 +19,9 @@ public class Userservice {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public List<Usermodel> getAll(){
         return userRepository.findAll();
@@ -33,8 +37,8 @@ public class Userservice {
        return userRepository.save(user);
     }
 
-    public String login(String user,String rawPassword){
-        Optional<Usermodel> founduser = userRepository.findByUsername(user);
+    public String login(String username,String rawPassword){
+        Optional<Usermodel> founduser = userRepository.findByUsername(username);
         if(founduser.isEmpty()){
             throw new RuntimeException("Not found User");
         }
@@ -44,6 +48,6 @@ public class Userservice {
         if(!passwordEncoder.matches(rawPassword,name.getPassword())){
             throw new RuntimeException("Password not matches");
         }
-        return "Login Success";
+        return jwtUtil.generateToken(username);
     }
 }
