@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.example.demo.model.Usermodel;
 import com.example.demo.service.Userservice;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,14 @@ public class AuthController {
     private Userservice userservice;
 
     @PostMapping("/register")
-    public Usermodel register(@RequestBody Usermodel user){
-        return userservice.register(user);
+    public UserDTO register(@RequestBody Usermodel user){
+        Usermodel saved = userservice.register(user);
+
+        UserDTO dto = new UserDTO();
+        dto.setId(saved.getId());
+        dto.setUsername(saved.getUsername());
+        dto.setRole(saved.getRole());
+        return dto;
     }
 
     @PostMapping("/login")
