@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthController {
     
     @Autowired
-    public Userservice userservice;
+    private Userservice userservice;
 
     @PostMapping("/register")
     public Usermodel register(@RequestBody Usermodel user){
